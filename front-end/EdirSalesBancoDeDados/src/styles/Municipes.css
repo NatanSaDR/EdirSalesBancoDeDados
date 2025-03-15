@@ -1,0 +1,168 @@
+/* 🔹 Container geral */
+.container {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+
+    h1 {
+        text-align: center;
+        color: #e4e4e4;
+        margin-bottom: 20px;
+    }
+}
+
+/* 🔹 Container da tabela com rolagem interna */
+.table-container {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    /* 🔥 Apenas rolagem horizontal */
+    overflow-y: auto;
+    /* 🔥 Permite rolagem vertical dentro da tabela */
+    max-height: 400px;
+    /* 🔥 Define uma altura máxima para que a tabela tenha rolagem interna */
+    border: 1px solid #ddd;
+    padding: 5px;
+    background-color: #fff;
+    position: relative;
+}
+
+/* 🔹 Estilos da tabela */
+.data-table {
+    width: 100%;
+    min-width: 900px;
+    /* 🔥 Define um tamanho mínimo para ativar a rolagem horizontal */
+    border-collapse: collapse;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* 🔹 Fixar o cabeçalho (`thead`) */
+.data-table thead {
+    position: sticky;
+    top: 0;
+    background-color: #272727;
+    z-index: 3;
+    /* 🔥 Garante que o cabeçalho fique acima do conteúdo */
+}
+
+/* 🔹 Estilos para os cabeçalhos */
+.data-table thead th {
+    background-color: #272727;
+    color: #fff;
+    padding: 12px;
+    text-align: left;
+    position: sticky;
+    top: 0;
+    /* 🔥 Fixando o cabeçalho no topo */
+    z-index: 3;
+    /* 🔥 Garante que o cabeçalho fique visível */
+}
+
+/* 🔹 Linha de filtros (inputs) */
+.data-table thead tr:nth-child(2) {
+    th {
+        background-color: #d8d8d8;
+        position: sticky;
+        top: 40px;
+        /* 🔥 Mantém os filtros fixos abaixo do cabeçalho */
+        z-index: 2;
+    }
+}
+
+/* 🔹 Inputs de filtro */
+.filter-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #1a1515;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* 🔹 Corpo da tabela */
+.data-table tbody {
+    background-color: #f8f8f8;
+
+    td {
+        padding: 12px;
+        border: 1px solid #afafaf;
+    }
+
+    /* Hover nas linhas */
+    tr:hover {
+        background-color: #949494;
+    }
+}
+
+/* 🔹 Fixar o Menu de Paginação */
+.botoes-acoes {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    /* 🔥 Garante que ocupe toda a largura */
+    background: #fff;
+    padding: 10px;
+    text-align: center;
+    z-index: 3;
+    box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
+
+    /* 🔹 Estilizando os inputs e selects */
+    button {
+        margin: 0 5px;
+        padding: 5px;
+        border-radius: 5px;
+        border: 1px solid #1a1515;
+        background-color: #272727;
+        color: #fff;
+        width: auto;
+        text-align: center;
+    }
+
+    select {
+        margin: 0 5px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        border: 1px solid #1a1515;
+        background-color: #272727;
+        color: #fff;
+        width: auto;
+        text-align: left;
+    }
+
+    .total-registro {
+        margin: 0 5px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        border: 1px solid #1a1515;
+        background-color: #272727;
+        color: #fff;
+        width: 80px;
+        text-align: center;
+    }
+}
+
+/* 🔹 Estiliza a barra de rolagem (opcional) */
+.table-container {
+    &::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 4px;
+
+        &:hover {
+            background: #555;
+        }
+    }
+}

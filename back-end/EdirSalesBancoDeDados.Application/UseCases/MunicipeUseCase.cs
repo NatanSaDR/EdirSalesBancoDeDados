@@ -160,41 +160,6 @@ namespace EdirSalesBancoDeDados.Application.UseCases
             await _municipeRepository.Delete(municipe);
         }
 
-        public async Task<List<MunicipeDtoFilter>> Filtrar(string? nome, string? sexo, DateTime? aniversario, DateTime? aniversarioInicio, DateTime? aniversarioFim, string? logradouro, string? numero, string? complemento, string? bairro, string? cidade, string? estado, string? cep, string? observacao, string? email, string? telefone, string? grupo, int pagina, int tamanhoPagina)
-        {
-            var municipes = await _municipeRepository.Filtrar(nome, sexo, aniversario, aniversarioInicio, aniversarioFim, logradouro, numero, complemento, bairro, cidade, estado, cep, observacao, email, telefone, grupo, pagina, tamanhoPagina);
-
-            var result = municipes.Select(m => new MunicipeDtoFilter
-            {
-                Nome = m.Nome,
-                Sexo = m.Sexo,
-                Aniversario = m.Aniversario,
-                Logradouro = m.Logradouro,
-                Numero = m.Numero,
-                Complemento = m.Complemento,
-                Bairro = m.Bairro,
-                Cidade = m.Cidade,
-                Estado = m.Estado,
-                CEP = m.CEP,
-                Observacao = m.Observacao,
-                Email = m.Email,
-                Telefones = m.Telefones.Select(t => new TelefoneDto
-                {
-                    Id = t.Id,
-                    Numero = t.Numero,
-                    Tipo = t.Tipo,
-                    Observacao = t.Observacao
-                }).ToList(),
-                Grupos = m.Grupos.Select(g => $"[{g.Id}] {g.NomeGrupo}").ToList(),
-                UsuarioCadastro = m.UsuarioCadastro,
-                DataCadastro = m.DataCadastro,
-                UsuarioAlteracao = m.UsuarioAlteracao,
-                DataAlteracao = m.DataAlteracao
-            }).ToList();
-
-            return result;
-        }
-
         public async Task<ICollection<DetalheMunicipe>> ListarTodos(int pagina, int tamanhoPagina)
         {
             var municipes = await _municipeRepository.List(pagina, tamanhoPagina);
@@ -344,6 +309,57 @@ namespace EdirSalesBancoDeDados.Application.UseCases
             }
             await _municipeRepository.ImportarMunicipes(listaMunicipes);
             return listaMunicipes.Count;
+        }
+
+        public async Task<object> Filtrar(
+    int? id, string? nome, string? sexo, DateTime? aniversario,
+    DateTime? aniversarioInicio, DateTime? aniversarioFim,
+    string? logradouro, string? numero, string? complemento,
+    string? bairro, string? cidade, string? estado, string? cep,
+    string? observacao, string? email, string? telefone,
+    string? grupo, int pagina, int tamanhoPagina)
+        {
+            var filtro = await _municipeRepository.Filtrar(
+                id, nome, sexo, aniversario, aniversarioInicio, aniversarioFim,
+                logradouro, numero, complemento, bairro, cidade, estado, cep,
+                observacao, email, telefone, grupo, pagina, tamanhoPagina
+            );
+
+            var result = filtro.dados.Select(m => new MunicipeDtoFilter
+            {
+                Id = m.Id,
+                Nome = m.Nome,
+                Sexo = m.Sexo,
+                Aniversario = m.Aniversario,
+                Logradouro = m.Logradouro,
+                Numero = m.Numero,
+                Complemento = m.Complemento,
+                Bairro = m.Bairro,
+                Cidade = m.Cidade,
+                Estado = m.Estado,
+                CEP = m.CEP,
+                Observacao = m.Observacao,
+                Email = m.Email,
+                Telefones = m.Telefones.Select(t => new TelefoneDto
+                {
+                    Id = t.Id,
+                    Numero = t.Numero,
+                    Tipo = t.Tipo,
+                    Observacao = t.Observacao
+                }).ToList(),
+                Grupos = m.Grupos.Select(g => $"[{g.Id}] {g.NomeGrupo}").ToList(),
+                UsuarioCadastro = m.UsuarioCadastro,
+                DataCadastro = m.DataCadastro,
+                UsuarioAlteracao = m.UsuarioAlteracao,
+                DataAlteracao = m.DataAlteracao
+            }).ToList();
+
+            // Retornar um objeto diretamente, sem envolver uma lista
+            return new
+            {
+                totalRegistros = filtro.totalRegistros,
+                municipes = result
+            };
         }
     }
 }

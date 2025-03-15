@@ -102,36 +102,30 @@ namespace EdirSalesBancoDeDados.Controllers
 
         [Authorize(Roles = "Admin, Editor, Leitor")]
         [HttpGet("Filtrar")]
-        public async Task<ActionResult<ICollection<MunicipeDtoFilter>>> Filtrar(
-            string? nome,
-            string? sexo,
-            DateTime? aniversario,
-            DateTime? aniversarioInicio,
-            DateTime? aniversarioFim,
-            string? logradouro,
-            string? numero,
-            string? complemento,
-            string? bairro,
-            string? cidade,
-            string? estado,
-            string? cep,
-            string? observacao,
-            string? email,
-            string? telefone,
-            string? grupo,
-            int pagina,
-            int tamanhoPagina)
+        public async Task<ActionResult<object>> Filtrar(
+    int id, string? nome, string? sexo, DateTime? aniversario,
+    DateTime? aniversarioInicio, DateTime? aniversarioFim,
+    string? logradouro, string? numero, string? complemento,
+    string? bairro, string? cidade, string? estado, string? cep,
+    string? observacao, string? email, string? telefone,
+    string? grupo, int pagina, int tamanhoPagina)
         {
             try
             {
-                var result = await _municipeUseCase.Filtrar(nome, sexo, aniversario, aniversarioInicio, aniversarioFim, logradouro, numero, complemento, bairro, cidade, estado, cep, observacao, email, telefone, grupo, pagina, tamanhoPagina);
-                return Ok(result);
+                var resultado = await _municipeUseCase.Filtrar(
+                    id, nome, sexo, aniversario, aniversarioInicio, aniversarioFim,
+                    logradouro, numero, complemento, bairro, cidade, estado, cep,
+                    observacao, email, telefone, grupo, pagina, tamanhoPagina
+                );
+
+                return Ok(resultado); // Agora resultado já é um objeto correto
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+
 
         [Authorize(Roles = "Admin")]
         [HttpPost("Importar")]

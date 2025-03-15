@@ -72,27 +72,27 @@ namespace EdirSalesBancoDeDados.Infrastructure.Repositories
 
 
 
-        public async Task<List<Municipe>> Filtrar(
-
-            string? nome,
-            string? sexo,
-            DateTime? aniversario,
-            DateTime? aniversarioInicio,
-            DateTime? aniversarioFim,
-            string? logradouro,
-            string? numero,
-            string? complemento,
-            string? bairro,
-            string? cidade,
-            string? estado,
-            string? cep,
-            string? observacao,
-            string? email,
-            string? telefone,
-            string? grupo,
-            int pagina,
-            int tamanhoPagina
-            )
+        public async Task<(int totalRegistros, List<Municipe> dados)> Filtrar(
+    int? id,
+    string? nome,
+    string? sexo,
+    DateTime? aniversario,
+    DateTime? aniversarioInicio,
+    DateTime? aniversarioFim,
+    string? logradouro,
+    string? numero,
+    string? complemento,
+    string? bairro,
+    string? cidade,
+    string? estado,
+    string? cep,
+    string? observacao,
+    string? email,
+    string? telefone,
+    string? grupo,
+    int pagina,
+    int tamanhoPagina
+)
         {
             var query = _context.Municipes
                 .Include(m => m.Telefones) // Inclui os telefones
@@ -146,7 +146,6 @@ namespace EdirSalesBancoDeDados.Infrastructure.Repositories
 
             if (!string.IsNullOrWhiteSpace(grupo))
             {
-                // Verificar se o que foi digitado é um número (ID do grupo)
                 bool ehNumero = int.TryParse(grupo, out int idGrupoConvertido);
 
                 query = query.Where(m => m.Grupos.Any(g =>
@@ -154,9 +153,14 @@ namespace EdirSalesBancoDeDados.Infrastructure.Repositories
                     (!ehNumero && g.NomeGrupo.Contains(grupo))  // Se for texto, busca pelo nome
                 ));
             }
-            var resultados = await query.ToListAsync();
 
-            return await query.AsQueryable().Paginar(pagina, tamanhoPagina);
+            // Obter o total de registros filtrados ANTES da paginação
+            int totalRegistros = await query.CountAsync();
+
+            // Aplicar paginação
+            var dados = await query.AsQueryable().Paginar(pagina, tamanhoPagina);
+
+            return (totalRegistros, dados);
         }
 
         //importar municipes

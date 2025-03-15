@@ -12,7 +12,8 @@
         public Task Delete(Municipe municipe);
         public Task DeleteRange(IEnumerable<Municipe> municipes);
         public Task<Municipe> Update(Municipe municipe);
-        public Task<List<Municipe>> Filtrar(
+        public Task<(int totalRegistros, List<Municipe> dados)> Filtrar(
+            int? id,
             string? nome,
             string? sexo,
             DateTime? aniversario,
@@ -29,8 +30,8 @@
             string? email,
             string? telefone,
             string? grupo,
-            int pagina = 1,
-            int tamanhoPagina = 20
+            int pagina,
+            int tamanhoPagina
             );
     }
 }

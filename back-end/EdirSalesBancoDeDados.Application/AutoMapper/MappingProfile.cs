@@ -39,7 +39,8 @@ namespace EdirSalesBancoDeDados.Application.AutoMapper
 
             CreateMap<MunicipeDto, Municipe>()
                 .ForMember(dest => dest.Grupos, opt => opt.Ignore()); // Ignoramos os grupos para tratá-los manualmente
-
+            CreateMap<Municipe, DetalheMunicipe>()
+                .ForMember(dest => dest.Solicitacoes, opt => opt.Ignore());
         }
     }
 }

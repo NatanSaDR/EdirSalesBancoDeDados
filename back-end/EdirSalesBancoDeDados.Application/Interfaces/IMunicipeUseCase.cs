@@ -17,7 +17,8 @@ namespace EdirSalesBancoDeDados.Application.Interfaces
         Task<MunicipeDto> AtualizarMunicipe(int id, MunicipeDto municipeDto);
         Task<DetalheMunicipe> BuscarPorId(int id);
         Task<ICollection<DetalheMunicipe>> ListarTodos(int pagina, int tamanhoPagina);
-        Task<List<MunicipeDtoFilter>> Filtrar(
+        Task<object> Filtrar(
+            int? id,
             string? nome,
             string? sexo,
             DateTime? aniversario,
