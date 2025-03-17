@@ -74,6 +74,7 @@ namespace EdirSalesBancoDeDados.Infrastructure.Repositories
         }
 
         public async Task<List<Solicitacao>> Filtrar(
+            int? id,
             string? tipo,
             string? descricao,
             string? observacao,
@@ -101,6 +102,9 @@ namespace EdirSalesBancoDeDados.Infrastructure.Repositories
                 .AsQueryable();
 
             // 🔎 Filtros opcionais para busca
+
+            if (id.HasValue)
+                query = query.Where(s => s.Id == id);
 
             if (!string.IsNullOrWhiteSpace(tipo))
                 query = query.Where(s => s.Tipo.Contains(tipo));

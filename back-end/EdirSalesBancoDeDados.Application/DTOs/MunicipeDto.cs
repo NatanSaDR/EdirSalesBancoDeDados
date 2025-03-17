@@ -4,9 +4,8 @@ using System.Text.Json.Serialization;
 
 namespace EdirSalesBancoDeDados.Application.DTOs
 {
-    public class MunicipeDto
+    public class MunicipeDto 
     {
-    
         public string Nome { get; set; } = string.Empty;
         public string Sexo { get; set; } = string.Empty;
         public DateTime? Aniversario { get; set; } 

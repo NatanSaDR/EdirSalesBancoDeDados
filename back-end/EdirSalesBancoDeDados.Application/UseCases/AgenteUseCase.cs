@@ -140,6 +140,24 @@ namespace EdirSalesBancoDeDados.Application.UseCases
             return _mapper.Map<ICollection<AgenteDto>>(result);
         }
 
+        //filtrar
+        public async Task<List<AgenteDto>> Filtrar(
+                int? id,
+                string? agenteSolucao,
+                string? contato,
+                int pagina,
+                int tamanhoPagina
+                )
+        {
+            var result = await _agenteRepository.Filtrar(id, agenteSolucao, contato, pagina, tamanhoPagina);
+
+            if (result == null)
+                throw new ArgumentException("Sem Resultados");
+
+            return _mapper.Map<List<AgenteDto>>(result);
+        }
+
+
         public async Task<int> ImportarAgentes(IFormFile arquivo)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;

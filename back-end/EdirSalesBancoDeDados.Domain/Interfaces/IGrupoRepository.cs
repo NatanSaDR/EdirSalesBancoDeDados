@@ -12,6 +12,6 @@
         Task Delete(Grupo grupo);
         Task<Grupo> Update(Grupo grupo);
         Task<Grupo> DetalhesDoGrupo(int id);
-        Task<List<Grupo>> Filtrar(string? nome, int pagina = 1, int tamanhoPagina = 20);
+        Task<List<Grupo>> Filtrar(int? id, string? nome, int pagina, int tamanhoPagina);
     }
 }

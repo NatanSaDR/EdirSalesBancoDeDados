@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EdirSalesBancoDeDados.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/agente")]
     [ApiController]
     [Authorize]
     public class AgenteController : ControllerBase
@@ -17,7 +17,7 @@ namespace EdirSalesBancoDeDados.Controllers
         }
 
         [Authorize(Roles = "Admin, Editor, Leitor")]
-        [HttpGet]
+        [HttpGet("listartodos")]
         public async Task<ActionResult<ICollection<AgenteDto>>> Listar(int pagina, int tamanhoPagina)
         {
             try
@@ -33,7 +33,7 @@ namespace EdirSalesBancoDeDados.Controllers
 
 
         [Authorize(Roles = "Admin, Editor, Leitor")]
-        [HttpGet("{id}", Name = "BuscarPorIdAgente")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<AgenteDto>> GetById(int id)
         {
             try
@@ -49,7 +49,7 @@ namespace EdirSalesBancoDeDados.Controllers
 
 
         [Authorize(Roles = "Editor, Admin")]
-        [HttpPost]
+        [HttpPost("cadastrar")]
         public async Task<ActionResult<AgenteDto>> AddAgente([FromBody] AgenteDto agenteDto)
         {
             try
@@ -65,7 +65,7 @@ namespace EdirSalesBancoDeDados.Controllers
 
 
         [Authorize(Roles = "Editor, Admin")]
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<ActionResult<AgenteDto>> Atualizar(int id, [FromBody] AgenteDto agenteDto)
         {
             try
@@ -81,7 +81,7 @@ namespace EdirSalesBancoDeDados.Controllers
 
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("{id:int}")]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
             try
@@ -109,6 +109,27 @@ namespace EdirSalesBancoDeDados.Controllers
             catch (Exception ex)
             {
                 return BadRequest(new { mensagem = "Erro ao importar agentes.", erro = ex.Message });
+            }
+        }
+
+        //filtrar 
+        [Authorize(Roles = "Admin, Editor, Leitor")]
+        [HttpGet("filtrar")]
+        public async Task<ActionResult<AgenteDto>> Filtrar(
+                int? id,
+                string? agenteSolucao,
+                string? contato,
+                int pagina,
+                int tamanhoPagina
+                ){
+            try
+            {
+                var res = await _agenteUseCase.Filtrar(id, agenteSolucao, contato, pagina, tamanhoPagina);
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }

@@ -231,6 +231,7 @@ namespace EdirSalesBancoDeDados.Application.UseCases
         }
 
         public async Task<List<SolicitacaoDto>> Filtrar(
+                int? id,
                 string? tipo,
                 string? descricao,
                 string? observacao,
@@ -250,7 +251,7 @@ namespace EdirSalesBancoDeDados.Application.UseCases
                 int tamanhoPagina
                 )
         {
-            var solicitacoes = await _solicitacaoRepository.Filtrar(
+            var solicitacoes = await _solicitacaoRepository.Filtrar(id,
                 tipo, descricao, observacao, sei, status,
                 dataFinalizado, dataFinalizadoInicio, dataFinalizadoFim,
                 dataCadastroInicio, dataCadastroFim, usuarioCadastro, usuarioAlteracao,

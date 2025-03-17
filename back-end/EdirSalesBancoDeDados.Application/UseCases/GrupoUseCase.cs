@@ -126,11 +126,9 @@ namespace EdirSalesBancoDeDados.Application.UseCases
 
             return _mapper.Map<IEnumerable<GrupoDto>>(grupos);
         }
-        public async Task<List<GrupoDto>> Filtrar(string? nome, int pagina = 1, int tamanhoPagina = 20)
+        public async Task<List<GrupoDto>> Filtrar(int? id, string? nome, int pagina = 1, int tamanhoPagina = 20)
         {
-            if (string.IsNullOrWhiteSpace(nome))
-                throw new ArgumentNullException("Nome ou id incorreto");
-            var result = await _grupoRepository.Filtrar(nome, pagina, tamanhoPagina);
+            var result = await _grupoRepository.Filtrar(id, nome, pagina, tamanhoPagina);
             if (result == null) throw new ArgumentNullException("Nenhum grupo encontrado");
             return _mapper.Map<List<GrupoDto>>(result);
         }

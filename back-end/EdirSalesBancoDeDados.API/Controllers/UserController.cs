@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
-[Route("api/users")]
+[Route("api/user")]
 public class UserController : ControllerBase
 {
     private readonly IUserUseCase _userUseCase;
@@ -16,10 +16,13 @@ public class UserController : ControllerBase
         _tokenService = tokenService;
     }
     [HttpGet("validate-token")]
-    [Authorize] // Garante que o usuário precisa estar autenticado
-    public IActionResult ValidateToken()
+    public ActionResult<bool> ValidateToken()
     {
-        return Ok(new { message = "Token válido" });
+        if (User.Identity.IsAuthenticated)
+        {
+            return true;
+        }
+        return false;
     }
 
 
@@ -40,11 +43,24 @@ public class UserController : ControllerBase
 
 
     [Authorize(Roles = "Admin")]
-    [HttpGet]
+    [HttpGet("listartodos")]
     public async Task<IActionResult> GetAll()
     {
-        var users = await _userUseCase.List();
-        return Ok(users);
+        try
+        {
+            var lista = await _userUseCase.List();
+            var totalRegistros = await _userUseCase.CountAll(); // Chama o método correto no UseCase
+
+            return Ok(new
+            {
+                solicitacoes = lista,
+                totalRegistros = totalRegistros
+            });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
 
@@ -57,8 +73,8 @@ public class UserController : ControllerBase
         return Ok(user);
     }
 
-    // [Authorize(Roles = "Admin")]
-    [HttpPost]
+    [Authorize(Roles = "Admin")]
+    [HttpPost("cadastrar")]
     public async Task<IActionResult> Create([FromBody] CreateUserRequest request)
     {
         await _userUseCase.Add(request.Username, request.Password, request.Role);
@@ -67,7 +83,6 @@ public class UserController : ControllerBase
 
 
     [Authorize(Roles = "Admin")]
-
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] CreateUserRequest request)
     {

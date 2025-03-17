@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EdirSalesBancoDeDados.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/grupo")]
     [ApiController]
     [Authorize]
 
@@ -19,13 +19,19 @@ namespace EdirSalesBancoDeDados.Controllers
         }
 
         [Authorize(Roles = "Admin, Editor, Leitor")]
-        [HttpGet("ListarTodos")]
+        [HttpGet("listartodos")]
         public async Task<ActionResult> Listar(int pagina, int tamanhoPagina)
         {
             try
             {
-                var result = await _grupoUseCase.ListarTodos(pagina, tamanhoPagina);
-                return Ok(result);
+                var listaPaginada = await _grupoUseCase.ListarTodos(pagina, tamanhoPagina);
+                var totalRegistros = await _grupoUseCase.CountAll(); // Chama o método correto no UseCase
+
+                return Ok(new
+                {
+                    grupos = listaPaginada,
+                    totalRegistros = totalRegistros
+                });
             }
             catch (Exception ex)
             {
@@ -34,7 +40,7 @@ namespace EdirSalesBancoDeDados.Controllers
         }
 
         [Authorize(Roles = "Admin, Editor, Leitor")]
-        [HttpGet("{id}", Name = "DetalhesDoGrupo")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<DetalheGrupoDto>> GetById(int id)
         {
             try
@@ -49,7 +55,7 @@ namespace EdirSalesBancoDeDados.Controllers
         }
         [Authorize(Roles = "Admin, Editor")]
 
-        [HttpPost("CadastrarGrupo")]
+        [HttpPost("cadastrar")]
         public async Task<ActionResult<GrupoDto>> Add([FromBody] GrupoDto grupoDto)
         {
             var result = await _grupoUseCase.AddGrupo(grupoDto);
@@ -58,7 +64,7 @@ namespace EdirSalesBancoDeDados.Controllers
 
         [Authorize(Roles = "Admin, Editor")]
 
-        [HttpPut("{id}", Name = "Atualizar")]
+        [HttpPut("{id}")]
         public async Task<ActionResult<GrupoDto>> Atualizar(int id, [FromBody] GrupoDto grupoDto)
         {
             try
@@ -89,7 +95,7 @@ namespace EdirSalesBancoDeDados.Controllers
 
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("Importar")]
+        [HttpPost("importar")]
         public async Task<ActionResult<int>> Importar(IFormFile excelGrupos)
         {
             try
@@ -106,12 +112,12 @@ namespace EdirSalesBancoDeDados.Controllers
         }
 
         [Authorize(Roles = "Admin, Editor, Leitor")]
-        [HttpGet("Filtrar")]
-        public async Task<ActionResult<GrupoDto>> Filtrar(string? nome, int pagina, int tamanhoPagina)
+        [HttpGet("filtrar")]
+        public async Task<ActionResult<GrupoDto>> Filtrar(int? id, string? nome, int pagina, int tamanhoPagina)
         {
             try
             {
-                var res = await _grupoUseCase.Filtrar(nome, pagina, tamanhoPagina);
+                var res = await _grupoUseCase.Filtrar(id, nome, pagina, tamanhoPagina);
                 return Ok(res);
             }
             catch (Exception ex)

@@ -54,16 +54,21 @@ namespace EdirSalesBancoDeDados.Infrastructure.Repositories
                 .Include(g => g.Municipes) // Inclui os munícipes relacionados ao grupo
                 .FirstOrDefaultAsync(g => g.Id == id);
         }
-        public async Task<List<Grupo>> Filtrar(string? nome, int pagina, int tamanhoPagina)
+        public async Task<List<Grupo>> Filtrar(int? id, string? nome, int pagina, int tamanhoPagina)
         {
-            bool ehNumero = int.TryParse(nome, out int idGrupo);
             var query = _context.Grupos.AsQueryable();
 
-            if (!string.IsNullOrEmpty(nome))
-                query = query.Where(g =>
-                (ehNumero && g.Id == idGrupo) ||
-               (!ehNumero && g.NomeGrupo.Contains(nome)));
+            if (id.HasValue)
+            {
+                query = query.Where(g => g.Id == id);
+            }
 
+            if (!string.IsNullOrEmpty(nome))
+            {
+                query = query.Where(g => g.NomeGrupo.Contains(nome));
+            }
+
+            
             return await query.Paginar(pagina, tamanhoPagina);
 
         }

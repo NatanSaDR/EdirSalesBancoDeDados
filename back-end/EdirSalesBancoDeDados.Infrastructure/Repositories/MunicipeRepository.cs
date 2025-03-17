@@ -99,6 +99,9 @@ namespace EdirSalesBancoDeDados.Infrastructure.Repositories
                 .Include(m => m.Grupos) // Inclui os grupos
                 .AsQueryable();
 
+            if (id.HasValue)
+                query = query.Where(m => m.Id == id);
+                
             if (aniversario.HasValue)
                 query = query.Where(m => m.Aniversario == aniversario);
 

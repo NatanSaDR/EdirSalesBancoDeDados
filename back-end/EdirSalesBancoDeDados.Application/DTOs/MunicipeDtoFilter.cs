@@ -9,6 +9,7 @@ namespace EdirSalesBancoDeDados.Application.DTOs
 {
     public class MunicipeDtoFilter : EntityBase
     {
+        public int Id { get; set; }
         public string Nome { get; set; } = string.Empty;
         public string Sexo { get; set; } = string.Empty;
         public DateTime? Aniversario { get; set; }
@@ -23,5 +24,9 @@ namespace EdirSalesBancoDeDados.Application.DTOs
         public string Email { get; set; } = string.Empty;
         public List<TelefoneDto> Telefones { get; set; } = new List<TelefoneDto>();
         public List<string> Grupos { get; set; } = new List<string>();
+        public DateTime DataCadastro { get; set; }
+        public DateTime? DataAlteracao { get; set; }
+        public string UsuarioCadastro { get; set; }
+        public string? UsuarioAlteracao { get; set; }
     }
 }

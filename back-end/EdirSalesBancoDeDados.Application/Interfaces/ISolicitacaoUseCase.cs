@@ -10,6 +10,7 @@ namespace EdirSalesBancoDeDados.Application.Interfaces
 
         Task<int> ImportarSolicitacoes(IFormFile arquivo);
         Task<List<SolicitacaoDto>> Filtrar(
+                int? id,
                 string? tipo,
                 string? descricao,
                 string? observacao,

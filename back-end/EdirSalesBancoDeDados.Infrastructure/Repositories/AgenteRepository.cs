@@ -40,6 +40,34 @@ namespace EdirSalesBancoDeDados.Infrastructure.Repositories
                 .Paginar(pagina, tamanhoPagina);
         }
 
+        //filtrar
+        public async Task<List<Agente>> Filtrar(
+            int? id,
+            string? agenteSolucao,
+            string? contato,
+            int pagina,
+            int tamanhoPagina
+        )
+        {
+            var query = _context.Agentes.AsQueryable();
+
+            if (id.HasValue)
+            {
+                query = query.Where(a => a.Id == id);
+            }
+
+            if (!string.IsNullOrEmpty(agenteSolucao))
+            {
+                query = query.Where(a => a.AgenteSolucao.Contains(agenteSolucao));
+            }
+
+            if (!string.IsNullOrEmpty(contato))
+            {
+                query = query.Where(a => a.Contatos.Any(c => c.Contato.Contains(contato)));
+            }
+
+            return await query.Paginar(pagina, tamanhoPagina);
+        }
         public async Task<Agente> Update(Agente agente)
         {
            _context.Agentes.Update(agente);

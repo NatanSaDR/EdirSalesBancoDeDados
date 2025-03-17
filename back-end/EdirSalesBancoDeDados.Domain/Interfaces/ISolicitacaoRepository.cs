@@ -5,6 +5,7 @@
         Task<int> CountAll();
         Task<int> ImportarSolicitacoes(List<Solicitacao> listaSolicitacoes);
         Task<List<Solicitacao>> Filtrar(
+            int? id,
             string? tipo,
             string? descricao,
             string? observacao,

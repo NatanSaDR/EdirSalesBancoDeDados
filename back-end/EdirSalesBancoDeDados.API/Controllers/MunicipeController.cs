@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EdirSalesBancoDeDados.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/municipe")]
     [ApiController]
     [Authorize]
 
@@ -18,7 +18,7 @@ namespace EdirSalesBancoDeDados.Controllers
         }
 
         [Authorize(Roles = "Admin, Editor, Leitor")]
-        [HttpGet]
+        [HttpGet("listartodos")]
         public async Task<ActionResult<object>> List(int pagina, int tamanhoPagina)
         {
             try
@@ -39,7 +39,7 @@ namespace EdirSalesBancoDeDados.Controllers
         }
 
         [Authorize(Roles = "Admin, Editor, Leitor")]
-        [HttpGet("{id}", Name = "BuscarPorId")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<MunicipeDto>> GetById(int id)
         {
             try
@@ -54,7 +54,7 @@ namespace EdirSalesBancoDeDados.Controllers
         }
 
         [Authorize(Roles = "Admin, Editor")]
-        [HttpPost]
+        [HttpPost("cadastrar")]
         public async Task<ActionResult<MunicipeDto>> AddMunicipe([FromBody] MunicipeDto municipeDto)
         {
             try
@@ -70,7 +70,7 @@ namespace EdirSalesBancoDeDados.Controllers
 
 
         [Authorize(Roles = "Admin, Editor")]
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<ActionResult<MunicipeDto>> Atualizar(int id, [FromBody] MunicipeDto municipeDto)
         {
             try
@@ -86,7 +86,7 @@ namespace EdirSalesBancoDeDados.Controllers
 
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("{id:int}")]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
             try
@@ -101,7 +101,7 @@ namespace EdirSalesBancoDeDados.Controllers
         }
 
         [Authorize(Roles = "Admin, Editor, Leitor")]
-        [HttpGet("Filtrar")]
+        [HttpGet("filtrar")]
         public async Task<ActionResult<object>> Filtrar(
     int id, string? nome, string? sexo, DateTime? aniversario,
     DateTime? aniversarioInicio, DateTime? aniversarioFim,
@@ -118,7 +118,7 @@ namespace EdirSalesBancoDeDados.Controllers
                     observacao, email, telefone, grupo, pagina, tamanhoPagina
                 );
 
-                return Ok(resultado); // Agora resultado já é um objeto correto
+                return Ok(resultado);
             }
             catch (Exception ex)
             {
@@ -128,7 +128,7 @@ namespace EdirSalesBancoDeDados.Controllers
 
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("Importar")]
+        [HttpPost("importar")]
         public async Task<ActionResult<int>> Importar(IFormFile excelMunicipes)
         {
             try

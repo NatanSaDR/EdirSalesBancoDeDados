@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EdirSalesBancoDeDados.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/solicitacao")]
     [ApiController]
     [Authorize]
     public class SolicitacaoController : ControllerBase
@@ -17,13 +17,19 @@ namespace EdirSalesBancoDeDados.Controllers
         }
 
         [Authorize(Roles = "Admin, Editor, Leitor")]
-        [HttpGet("ListarTodos")]
+        [HttpGet("listartodos")]
         public async Task<ActionResult<ICollection<SolicitacaoDto>>> Listar(int pagina, int tamanhoPagina)
         {
             try
             {
-                var result = await _solicitacaoUseCase.ListarTodos(pagina, tamanhoPagina);
-                return Ok(result);
+                var listaPaginada = await _solicitacaoUseCase.ListarTodos(pagina, tamanhoPagina);
+                var totalRegistros = await _solicitacaoUseCase.CountAll(); // Chama o método correto no UseCase
+
+                return Ok(new
+                {
+                    solicitacoes = listaPaginada,
+                    totalRegistros = totalRegistros
+                });
             }
             catch (Exception ex)
             {
@@ -33,7 +39,7 @@ namespace EdirSalesBancoDeDados.Controllers
         }
 
         [Authorize(Roles = "Admin, Editor, Leitor")]
-        [HttpGet("BuscarId")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<SolicitacaoDto>> BuscarId(int id)
         {
             try
@@ -48,7 +54,7 @@ namespace EdirSalesBancoDeDados.Controllers
         }
 
         [Authorize(Roles = "Admin, Editor")]
-        [HttpPost("Cadastrar")]
+        [HttpPost("cadastrar")]
         public async Task<ActionResult<SolicitacaoDto>> CadastrarSolicitacao(SolicitacaoDto solicitacaoDto)
         {
             try
@@ -65,7 +71,7 @@ namespace EdirSalesBancoDeDados.Controllers
         }
 
         [Authorize(Roles = "Admin, Editor")]
-        [HttpPut("Atualizar")]
+        [HttpPut("{id}")]
         public async Task<ActionResult<SolicitacaoDto>> Atualizar(int id, [FromBody] SolicitacaoDto solicitacaoDto)
         {
             try
@@ -80,7 +86,7 @@ namespace EdirSalesBancoDeDados.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("Deletar")]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> Deletar(int id)
         {
             try
@@ -98,6 +104,7 @@ namespace EdirSalesBancoDeDados.Controllers
         [Authorize(Roles = "Admin, Editor, Leitor")]
         [HttpGet("filtrar")]
         public async Task<IActionResult> Filtrar(
+        [FromQuery] int? id,
         [FromQuery] string? tipo,
         [FromQuery] string? descricao,
         [FromQuery] string? observacao,
@@ -119,7 +126,7 @@ namespace EdirSalesBancoDeDados.Controllers
         {
             try
             {
-                var resultado = await _solicitacaoUseCase.Filtrar(
+                var resultado = await _solicitacaoUseCase.Filtrar(id,
                     tipo, descricao, observacao, sei, status,
                     dataFinalizado, dataFinalizadoInicio, dataFinalizadoFim,
                     dataCadastroInicio, dataCadastroFim, usuarioCadastro, usuarioAlteracao,

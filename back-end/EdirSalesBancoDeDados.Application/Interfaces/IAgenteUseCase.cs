@@ -13,5 +13,13 @@ namespace EdirSalesBancoDeDados.Application.Interfaces
         Task<AgenteDto> AtualizarAgente(int id, AgenteDto agenteDto);
         Task<AgenteDto> BuscarPorId(int id);
         Task<ICollection<AgenteDto>> ListarTodos(int pagina, int tamanhoPagina);
+        //filtrar
+        Task<List<AgenteDto>> Filtrar(
+                int? id,
+                string? agenteSolucao,
+                string? contato,
+                int pagina,
+                int tamanhoPagina
+                );
     }
 }

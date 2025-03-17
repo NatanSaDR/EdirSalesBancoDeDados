@@ -18,6 +18,6 @@ namespace EdirSalesBancoDeDados.Application.Interfaces
         Task<GrupoDto> AtualizarGrupo(int id, GrupoDto grupoDto);
         Task<DetalheGrupoDto> BuscarPorId(int id);
         Task<IEnumerable<GrupoDto>> ListarTodos(int pagina, int tamanhoPagina);
-        Task<List<GrupoDto>> Filtrar(string? nome, int pagina = 1, int tamanhoPagina = 20);
+        Task<List<GrupoDto>> Filtrar(int? id, string? nome, int pagina, int tamanhoPagina);
     }
 }

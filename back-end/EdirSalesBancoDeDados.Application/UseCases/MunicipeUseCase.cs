@@ -127,21 +127,45 @@ namespace EdirSalesBancoDeDados.Application.UseCases
             if (id == 0)
                 throw new ArgumentException("Id não encontrado");
 
-            var municipe = await _municipeRepository.GetById(id);
-            if (municipe == null)
+            var m = await _municipeRepository.GetById(id);
+            if (m == null)
                 throw new ArgumentNullException("Municipe não pode ser nulo");
 
-            var detalheMunicipe = _mapper.Map<DetalheMunicipe>(municipe);
-
-            foreach (var solicitacao in municipe.Solicitacoes)
+            var result = new DetalheMunicipe
             {
-                detalheMunicipe.Solicitacoes.Add(new DetalheSolicitacao
+                Id = m.Id,
+                Nome = m.Nome,
+                Sexo = m.Sexo,
+                Aniversario = m.Aniversario,
+                Logradouro = m.Logradouro,
+                Numero = m.Numero,
+                Complemento = m.Complemento,
+                Bairro = m.Bairro,
+                Cidade = m.Cidade,
+                Estado = m.Estado,
+                CEP = m.CEP,
+                Observacao = m.Observacao,
+                Email = m.Email,
+                Telefones = m.Telefones.Select(t => new TelefoneDto
                 {
-                    Id = solicitacao.Id,
-                    Descricao = solicitacao.Descricao,
-                });
+                    Id = t.Id,
+                    Numero = t.Numero,
+                    Tipo = t.Tipo,
+                    Observacao = t.Observacao
+                }).ToList(),
+                Grupos = m.Grupos.Select(g => $"[{g.Id}] {g.NomeGrupo}").ToList(),
+                UsuarioCadastro = m.UsuarioCadastro,
+                DataCadastro = m.DataCadastro,
+                UsuarioAlteracao = m.UsuarioAlteracao,
+                DataAlteracao = m.DataAlteracao
+            };
+
+            foreach (var solicitacao in m.Solicitacoes)
+            {
+                result.Solicitacoes.Add($"{solicitacao.Id} - {solicitacao.Descricao}");
             }
-            return _mapper.Map<DetalheMunicipe>(municipe);
+
+            return result;
         }
 
         public async Task DeletarMunicipe(int id)
