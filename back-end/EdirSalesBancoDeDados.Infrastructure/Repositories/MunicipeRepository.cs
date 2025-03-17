@@ -73,26 +73,26 @@ namespace EdirSalesBancoDeDados.Infrastructure.Repositories
 
 
         public async Task<(int totalRegistros, List<Municipe> dados)> Filtrar(
-    int? id,
-    string? nome,
-    string? sexo,
-    DateTime? aniversario,
-    DateTime? aniversarioInicio,
-    DateTime? aniversarioFim,
-    string? logradouro,
-    string? numero,
-    string? complemento,
-    string? bairro,
-    string? cidade,
-    string? estado,
-    string? cep,
-    string? observacao,
-    string? email,
-    string? telefone,
-    string? grupo,
-    int pagina,
-    int tamanhoPagina
-)
+            int? id,
+            string? nome,
+            string? sexo,
+            DateTime? aniversario,
+            DateTime? aniversarioInicio,
+            DateTime? aniversarioFim,
+            string? logradouro,
+            string? numero,
+            string? complemento,
+            string? bairro,
+            string? cidade,
+            string? estado,
+            string? cep,
+            string? observacao,
+            string? email,
+            string? telefone,
+            string? grupo,
+            int pagina,
+            int tamanhoPagina
+        )
         {
             var query = _context.Municipes
                 .Include(m => m.Telefones) // Inclui os telefones

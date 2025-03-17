@@ -192,7 +192,10 @@ namespace EdirSalesBancoDeDados.Application.UseCases
                 throw new ArgumentNullException("Não existe municipes");
 
             var municipesMap = _mapper.Map<ICollection<DetalheMunicipe>>(municipes);
-
+            foreach (var municipeMap in municipesMap)
+            {
+                municipeMap.Grupos = municipes.FirstOrDefault(m => m.Id == municipeMap.Id)?.Grupos.Select(g => $"[{g.Id}] {g.NomeGrupo}").ToList();
+            }
             return municipesMap;
         }
 
