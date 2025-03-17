@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
-
-export const useFilter = ({ hasInput, }) => {
+import axios from 'axios';
+export const useFilter = ({ pagina, tamanhoPagina }) => {
     // se tiver valor no input, esse "hasInput" retorna true, se for true, ele faz a busca por filtro
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
