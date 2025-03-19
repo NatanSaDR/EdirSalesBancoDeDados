@@ -12,7 +12,7 @@ const LoginPage = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5079/api/users/login",
+        "http://localhost:5079/api/user/login",
         { username, password },
         { headers: { "Content-Type": "application/json" } }
       );

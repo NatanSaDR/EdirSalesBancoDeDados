@@ -103,19 +103,43 @@ namespace EdirSalesBancoDeDados.Controllers
         [Authorize(Roles = "Admin, Editor, Leitor")]
         [HttpGet("filtrar")]
         public async Task<ActionResult<object>> Filtrar(
-    int id, string? nome, string? sexo, DateTime? aniversario,
-    DateTime? aniversarioInicio, DateTime? aniversarioFim,
-    string? logradouro, string? numero, string? complemento,
-    string? bairro, string? cidade, string? estado, string? cep,
-    string? observacao, string? email, string? telefone,
-    string? grupo, int pagina, int tamanhoPagina)
+                int? id,
+            string? nome,
+            string? sexo,
+            string? aniversario,
+            string? aniversarioInicio,
+            string? aniversarioFim,
+            string? logradouro,
+            string? numero,
+            string? complemento,
+            string? bairro,
+            string? cidade,
+            string? estado,
+            string? cep,
+            string? observacao,
+            string? email,
+            string? telefone,
+            string? grupo,
+            string? dataCadastro,
+            string? dataCadInicio,
+            string? dataCadFim,
+            string? dataAlteracao,
+            string? dataAltInicio,
+            string? dataAltFim,
+            string? usuarioCadastro,
+            string? usuarioAlteracao,
+            int pagina,
+            int tamanhoPagina
+                )
         {
             try
             {
                 var resultado = await _municipeUseCase.Filtrar(
                     id, nome, sexo, aniversario, aniversarioInicio, aniversarioFim,
                     logradouro, numero, complemento, bairro, cidade, estado, cep,
-                    observacao, email, telefone, grupo, pagina, tamanhoPagina
+                    observacao, email, telefone, grupo, dataCadastro, dataCadInicio, dataCadFim, dataAlteracao, dataAltInicio, dataAltFim,
+                    usuarioCadastro, usuarioAlteracao,
+                    pagina, tamanhoPagina
                 );
 
                 return Ok(resultado);

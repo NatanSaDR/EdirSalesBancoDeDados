@@ -7,12 +7,12 @@ using EdirSalesBancoDeDados.Domain;
 
 namespace EdirSalesBancoDeDados.Application.DTOs
 {
-    public class MunicipeDtoFilter : EntityBase
+    public class MunicipeDtoFilter
     {
         public int Id { get; set; }
         public string Nome { get; set; } = string.Empty;
         public string Sexo { get; set; } = string.Empty;
-        public DateTime? Aniversario { get; set; }
+        public string Aniversario { get; set; }
         public string Logradouro { get; set; } = string.Empty;
         public string Numero { get; set; } = string.Empty;
         public string Complemento { get; set; } = string.Empty;
@@ -24,8 +24,8 @@ namespace EdirSalesBancoDeDados.Application.DTOs
         public string Email { get; set; } = string.Empty;
         public List<TelefoneDto> Telefones { get; set; } = new List<TelefoneDto>();
         public List<string> Grupos { get; set; } = new List<string>();
-        public DateTime DataCadastro { get; set; }
-        public DateTime? DataAlteracao { get; set; }
+        public string DataCadastro { get; set; }
+        public string? DataAlteracao { get; set; }
         public string UsuarioCadastro { get; set; }
         public string? UsuarioAlteracao { get; set; }
     }

@@ -136,7 +136,7 @@ namespace EdirSalesBancoDeDados.Application.UseCases
                 Id = m.Id,
                 Nome = m.Nome,
                 Sexo = m.Sexo,
-                Aniversario = m.Aniversario,
+                Aniversario = m.Aniversario?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
                 Logradouro = m.Logradouro,
                 Numero = m.Numero,
                 Complemento = m.Complemento,
@@ -155,9 +155,9 @@ namespace EdirSalesBancoDeDados.Application.UseCases
                 }).ToList(),
                 Grupos = m.Grupos.Select(g => $"[{g.Id}] {g.NomeGrupo}").ToList(),
                 UsuarioCadastro = m.UsuarioCadastro,
-                DataCadastro = m.DataCadastro,
+                DataCadastro = m.DataCadastro.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture),
                 UsuarioAlteracao = m.UsuarioAlteracao,
-                DataAlteracao = m.DataAlteracao
+                DataAlteracao = m.DataAlteracao?.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture)
             };
 
             foreach (var solicitacao in m.Solicitacoes)
@@ -195,6 +195,21 @@ namespace EdirSalesBancoDeDados.Application.UseCases
             foreach (var municipeMap in municipesMap)
             {
                 municipeMap.Grupos = municipes.FirstOrDefault(m => m.Id == municipeMap.Id)?.Grupos.Select(g => $"[{g.Id}] {g.NomeGrupo}").ToList();
+            }
+            foreach (var municipe in municipesMap)
+            {
+                if (municipe.Aniversario != null)
+                {
+                    municipe.Aniversario = DateTime.Parse(municipe.Aniversario).ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+                }
+                if (municipe.DataCadastro != null)
+                {
+                    municipe.DataCadastro = DateTime.Parse(municipe.DataCadastro).ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                }
+                if (municipe.DataAlteracao != null)
+                {
+                    municipe.DataAlteracao = DateTime.Parse(municipe.DataAlteracao).ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                }
             }
             return municipesMap;
         }
@@ -339,17 +354,75 @@ namespace EdirSalesBancoDeDados.Application.UseCases
         }
 
         public async Task<object> Filtrar(
-    int? id, string? nome, string? sexo, DateTime? aniversario,
-    DateTime? aniversarioInicio, DateTime? aniversarioFim,
-    string? logradouro, string? numero, string? complemento,
-    string? bairro, string? cidade, string? estado, string? cep,
-    string? observacao, string? email, string? telefone,
-    string? grupo, int pagina, int tamanhoPagina)
+                int? id,
+                string? nome,
+                string? sexo,
+                string? aniversario,
+                string? aniversarioInicio,
+                string? aniversarioFim,
+                string? logradouro,
+                string? numero,
+                string? complemento,
+                string? bairro,
+                string? cidade,
+                string? estado,
+                string? cep,
+                string? observacao,
+                string? email,
+                string? telefone,
+                string? grupo,
+                string? dataCadastro,
+                string? dataCadInicio,
+                string? dataCadFim,
+                string? dataAlteracao,
+                string? dataAltInicio,
+                string? dataAltFim,
+                string? usuarioCadastro,
+                string? usuarioAlteracao,
+                int pagina,
+                int tamanhoPagina)
         {
+            var dataCad = DateTime.TryParseExact(dataCadastro, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var dataCadastroDt)
+                ? dataCadastroDt
+                : (DateTime?)null;
+
+            var dataAlt = DateTime.TryParseExact(dataAlteracao, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var dataAlteracaoDt)
+                ? dataAlteracaoDt
+                : (DateTime?)null;
+
+            var aniv = DateTime.TryParseExact(aniversario, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var aniversarioDt)
+                ? aniversarioDt
+                : (DateTime?)null;
+
+            var anivInicio = DateTime.TryParseExact(aniversarioInicio, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var aniversarioInicioDt)
+                ? aniversarioInicioDt
+                : (DateTime?)null;
+
+            var anivFim = DateTime.TryParseExact(aniversarioFim, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var aniversarioFimDt)
+                ? aniversarioFimDt
+                : (DateTime?)null;
+
+            var dataInicioCad = DateTime.TryParseExact(dataCadInicio, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var dataInicioDt)
+                ? dataInicioDt
+                : (DateTime?)null;
+
+            var dataFimCad = DateTime.TryParseExact(dataCadFim, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var dataFimDt)
+                ? dataFimDt
+                : (DateTime?)null;
+
+            var dataInicioAlt = DateTime.TryParseExact(dataAltInicio, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var dataAltInicioDt)
+                ? dataAltInicioDt
+                : (DateTime?)null;
+
+            var dataFimAlt = DateTime.TryParseExact(dataAltFim, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var dataAltFimDt)
+                ? dataAltFimDt
+                : (DateTime?)null;
+
             var filtro = await _municipeRepository.Filtrar(
-                id, nome, sexo, aniversario, aniversarioInicio, aniversarioFim,
+                id, nome, sexo, aniv, anivInicio, anivFim,
                 logradouro, numero, complemento, bairro, cidade, estado, cep,
-                observacao, email, telefone, grupo, pagina, tamanhoPagina
+                observacao, email, telefone, grupo, dataCad, dataInicioCad, dataFimCad, dataAlt, dataInicioAlt, dataFimAlt,
+                usuarioCadastro, usuarioAlteracao, pagina, tamanhoPagina
             );
 
             var result = filtro.dados.Select(m => new MunicipeDtoFilter
@@ -357,7 +430,8 @@ namespace EdirSalesBancoDeDados.Application.UseCases
                 Id = m.Id,
                 Nome = m.Nome,
                 Sexo = m.Sexo,
-                Aniversario = m.Aniversario,
+                //passo o aniversario tratado sem a hora em formato string para o DTO
+                Aniversario = m.Aniversario?.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
                 Logradouro = m.Logradouro,
                 Numero = m.Numero,
                 Complemento = m.Complemento,
@@ -376,9 +450,9 @@ namespace EdirSalesBancoDeDados.Application.UseCases
                 }).ToList(),
                 Grupos = m.Grupos.Select(g => $"[{g.Id}] {g.NomeGrupo}").ToList(),
                 UsuarioCadastro = m.UsuarioCadastro,
-                DataCadastro = m.DataCadastro,
+                DataCadastro = m.DataCadastro.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture),
                 UsuarioAlteracao = m.UsuarioAlteracao,
-                DataAlteracao = m.DataAlteracao
+                DataAlteracao = m.DataAlteracao?.ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture)
             }).ToList();
 
             // Retornar um objeto diretamente, sem envolver uma lista

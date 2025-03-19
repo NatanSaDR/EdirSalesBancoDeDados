@@ -8,7 +8,7 @@ namespace EdirSalesBancoDeDados.Application.DTOs
     {
         public string Nome { get; set; } = string.Empty;
         public string Sexo { get; set; } = string.Empty;
-        public DateTime? Aniversario { get; set; } 
+        public string Aniversario { get; set; } 
         public string Logradouro { get; set; } = string.Empty;
         public string Numero { get; set; } = string.Empty;
         public string Complemento { get; set; } = string.Empty;

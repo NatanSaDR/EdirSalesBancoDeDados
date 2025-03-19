@@ -124,17 +124,33 @@ namespace EdirSalesBancoDeDados.Infrastructure.Repositories
             if (dataFinalizado.HasValue)
                 query = query.Where(s => s.DataFinalizado == dataFinalizado);
 
-            if (dataFinalizadoInicio.HasValue)
-                query = query.Where(s => s.DataFinalizado >= dataFinalizadoInicio.Value);
 
-            if (dataFinalizadoFim.HasValue)
-                query = query.Where(s => s.DataFinalizado <= dataFinalizadoFim.Value);
+            if (dataFinalizadoInicio.HasValue && dataFinalizadoFim.HasValue)
+            {
+                query = query.Where(s => s.DataFinalizado >= dataFinalizadoInicio && s.DataFinalizado <= dataFinalizadoFim);
+            }
+            else if (dataFinalizadoInicio.HasValue)
+            {
+                query = query.Where(s => s.DataFinalizado >= dataFinalizadoInicio);
+            }
+            else if (dataFinalizadoFim.HasValue)
+            {
+                query = query.Where(s => s.DataFinalizado <= dataFinalizadoFim);
+            }
 
-            if (dataCadastroInicio.HasValue)
-                query = query.Where(s => s.DataCadastro >= dataCadastroInicio.Value);
+            if (dataCadastroInicio.HasValue && dataCadastroFim.HasValue)
+            {
+                query = query.Where(s => s.DataCadastro >= dataCadastroInicio && s.DataCadastro <= dataCadastroFim);
+            }
+            else if (dataCadastroInicio.HasValue)
+            {
+                query = query.Where(s => s.DataCadastro >= dataCadastroInicio);
+            }
+            else if (dataCadastroFim.HasValue)
+            {
+                query = query.Where(s => s.DataCadastro <= dataCadastroFim);
+            }
 
-            if (dataCadastroFim.HasValue)
-                query = query.Where(s => s.DataCadastro <= dataCadastroFim.Value);
 
             if (!string.IsNullOrWhiteSpace(usuarioCadastro))
                 query = query.Where(s => s.UsuarioCadastro.Contains(usuarioCadastro));

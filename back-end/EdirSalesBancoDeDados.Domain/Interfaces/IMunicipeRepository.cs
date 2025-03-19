@@ -30,6 +30,14 @@
             string? email,
             string? telefone,
             string? grupo,
+            DateTime? dataCadastro,
+            DateTime? dataCadInicio,
+            DateTime? dataCadFim,
+            DateTime? dataAlteracao,
+            DateTime? dataAltInicio,
+            DateTime? dataAltFim,
+            string? usuarioCadastro,
+            string? usuarioAlteracao,
             int pagina,
             int tamanhoPagina
             );

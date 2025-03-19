@@ -123,14 +123,38 @@ namespace EdirSalesBancoDeDados.Application.UseCases
             var grupos = await _grupoRepository.List(pagina, tamanhoPagina);
             if (grupos == null)
                 throw new ArgumentNullException("Nenhum grupo encontrado.");
-
-            return _mapper.Map<IEnumerable<GrupoDto>>(grupos);
+            var gruposMap = _mapper.Map<IEnumerable<GrupoDto>>(grupos);
+            foreach (var grupoMap in gruposMap)
+            {
+                if (grupoMap.DataCadastro != null)
+                {
+                    grupoMap.DataCadastro = DateTime.Parse(grupoMap.DataCadastro).ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+                }
+                if (grupoMap.DataAlteracao != null)
+                {
+                    grupoMap.DataAlteracao = DateTime.Parse(grupoMap.DataAlteracao).ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+                }
+            }
+            return gruposMap;
         }
         public async Task<List<GrupoDto>> Filtrar(int? id, string? nome, int pagina = 1, int tamanhoPagina = 20)
         {
             var result = await _grupoRepository.Filtrar(id, nome, pagina, tamanhoPagina);
             if (result == null) throw new ArgumentNullException("Nenhum grupo encontrado");
-            return _mapper.Map<List<GrupoDto>>(result);
+            var gruposMap = _mapper.Map<List<GrupoDto>>(result);
+
+            foreach (var grupoMap in gruposMap)
+            {
+                if (grupoMap.DataCadastro != null)
+                {
+                    grupoMap.DataCadastro = DateTime.Parse(grupoMap.DataCadastro).ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+                }
+                if (grupoMap.DataAlteracao != null)
+                {
+                    grupoMap.DataAlteracao = DateTime.Parse(grupoMap.DataAlteracao).ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+                }
+            }
+            return gruposMap;
         }
 
         public async Task<int> CountAll()
